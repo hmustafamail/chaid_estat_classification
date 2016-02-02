@@ -10,7 +10,7 @@ clear
 set more off
 
 // Set current directory (you will have to change this)
-cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaidestat"
+cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_classification"
 
 log using outputExample,text replace
 
@@ -40,6 +40,6 @@ chaid acute, ordered(vent drips nummedsquartile) ///
 			if mod(observation + 4, 9)
 
 // TODO: Run on a sample set
-chaid_estat_classification if !mod(observation + 4, 9)
+//chaid_estat_classification if !mod(observation + 4, 9)
 
 log close

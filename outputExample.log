@@ -1,9 +1,9 @@
----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\c
-> haidestat\outputExample.log
+       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_cla
+> ssification\outputExample.log
   log type:  text
- opened on:   2 Feb 2016, 13:48:53
+ opened on:   2 Feb 2016, 17:02:00
 
 . 
 . // Import data
@@ -86,40 +86,13 @@ Chi-Square Automated Interaction Detection (CHAID) Tree Branching Results
     +---------------------------+
 
 . 
-. // TODO: Run on a sample set (this is just an example)
-. chaid_estat_classification if !mod(observation + 4, 9)
-
-Decision tree model for acute
-
-              -------- True --------
-Classified |         D            ~D  |      Total
------------+--------------------------+-----------
-     +     |         4             0  |          4
-     -     |         1             1  |          2
------------+--------------------------+-----------
-   Total   |         5             1  |          6
-
-Classified + if predicted Pr(D) >= .5
-True D defined as acute != 0
---------------------------------------------------
-Sensitivity                     Pr( +| D)   80.00%
-Specificity                     Pr( -|~D)  100.00%
-Positive predictive value       Pr( D| +)  100.00%
-Negative predictive value       Pr(~D| -)   50.00%
---------------------------------------------------
-False + rate for true ~D        Pr( +|~D)    0.00%
-False - rate for true D         Pr( -| D)   20.00%
-False + rate for classified +   Pr(~D| +)    0.00%
-False - rate for classified -   Pr( D| -)   50.00%
---------------------------------------------------
-Correctly classified                        83.33%
---------------------------------------------------
-
+. // TODO: Run on a sample set
+. //chaid_estat_classification if !mod(observation + 4, 9)
 . 
 . log close
       name:  <unnamed>
-       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\c
-> haidestat\outputExample.log
+       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_cla
+> ssification\outputExample.log
   log type:  text
- closed on:   2 Feb 2016, 13:48:53
----------------------------------------------------------------------------------------
+ closed on:   2 Feb 2016, 17:02:02
+-----------------------------------------------------------------------------------------------------
