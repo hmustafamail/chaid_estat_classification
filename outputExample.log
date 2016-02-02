@@ -1,0 +1,98 @@
+---------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\c
+> haidestat\outputExample.log
+  log type:  text
+ opened on:   2 Feb 2016, 13:48:53
+
+. 
+. // Import data
+. insheet using "SampleSet.csv"
+(13 vars, 54 obs)
+
+. 
+. // Split up nummeds into quartiles
+. egen nummedsquartile = cut(nummeds), at(1, 6, 11, 15, 29)
+
+. 
+. //******************************************************************************
+. // Example of using ESTAT, the precedent for logit models.
+. //******************************************************************************
+. 
+. // Create logistic model
+. logistic acute vent drips nummedsquartile if mod(observation + 4, 9)
+
+Logistic regression                               Number of obs   =         48
+                                                  LR chi2(3)      =      26.55
+                                                  Prob > chi2     =     0.0000
+Log likelihood =  -19.82789                       Pseudo R2       =     0.4010
+
+---------------------------------------------------------------------------------
+          acute | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+           vent |   12.08054   15.15933     1.99   0.047     1.032646    141.3257
+          drips |   2.212344   1.144865     1.53   0.125     .8023519     6.10015
+nummedsquartile |   1.161343   .0972935     1.79   0.074     .9854839    1.368583
+          _cons |   .0721588   .0713391    -2.66   0.008     .0103934    .5009816
+---------------------------------------------------------------------------------
+
+. 
+. // Run on a sample set
+. estat classification if !mod(observation + 4, 9)
+
+Logistic model for acute
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |         4             0  |          4
+     -     |         1             1  |          2
+-----------+--------------------------+-----------
+   Total   |         5             1  |          6
+
+Classified + if predicted Pr(D) >= .5
+True D defined as acute != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D)   80.00%
+Specificity                     Pr( -|~D)  100.00%
+Positive predictive value       Pr( D| +)  100.00%
+Negative predictive value       Pr(~D| -)   50.00%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)    0.00%
+False - rate for true D         Pr( -| D)   20.00%
+False + rate for classified +   Pr(~D| +)    0.00%
+False - rate for classified -   Pr( D| -)   50.00%
+--------------------------------------------------
+Correctly classified                        83.33%
+--------------------------------------------------
+
+. 
+. //******************************************************************************
+. // Example of using CHAIDESTAT, an analogous function for CHAID tree models.
+. //******************************************************************************
+. 
+. // Create the decision tree
+. chaid acute, ordered(vent drips nummedsquartile) ///
+>                         spltalpha(0.5) minnode(10) minsplit(10), ///
+>                         if mod(observation + 4, 9)
+
+Chi-Square Automated Interaction Detection (CHAID) Tree Branching Results
+--------------------------------------------------------------------------------
+
+                1            2
+    +---------------------------+
+  1 |      vent@0       vent@1  |
+  2 |  Cluster #1   Cluster #2  |
+    +---------------------------+
+
+. 
+. // TODO: Run on a sample set
+. // chaidestat classification if !mod(observation + 4, 9)
+. 
+. log close
+      name:  <unnamed>
+       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\c
+> haidestat\outputExample.log
+  log type:  text
+ closed on:   2 Feb 2016, 13:48:53
+---------------------------------------------------------------------------------------
