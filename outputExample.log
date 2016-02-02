@@ -87,7 +87,7 @@ Chi-Square Automated Interaction Detection (CHAID) Tree Branching Results
 
 . 
 . // TODO: Run on a sample set (this is just an example)
-. // chaid_estat_classification if !mod(observation + 4, 9)
+. chaid_estat_classification if !mod(observation + 4, 9)
 
 Decision tree model for acute
 

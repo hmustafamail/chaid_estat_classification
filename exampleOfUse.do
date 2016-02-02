@@ -40,6 +40,6 @@ chaid acute, ordered(vent drips nummedsquartile) ///
 			if mod(observation + 4, 9)
 
 // TODO: Run on a sample set
-// chaidestat classification if !mod(observation + 4, 9)
+chaid_estat_classification if !mod(observation + 4, 9)
 
 log close
