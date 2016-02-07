@@ -56,7 +56,7 @@ program define chaid_estat_classification
 	display ""
 	display "{txt}{title:Decision tree model for acute}" // todo: acute
 	display ""
-	display "{ralign 36:{c TLC}{hline 2} Actual {hline 3}{c TRC}}"
+	display "{ralign 39:{c TLC}{hline 11} Actual {hline 7}{c TRC}}"
 	display "Classified {c |}{ralign 10: D}{dup 3: }{ralign 11: ~D}{dup 2: }{c |}{ralign 11: Total}"
 	display "{hline 11}{c +}{hline 26}{c +}{hline 11}"	
 	display "{center 11: +}{c |}" %10.0g `truePositives' "{dup 3: }" %11.0g `falsePositives' "{dup 2: }{c |}" %11.0g `classifiedPositives'
