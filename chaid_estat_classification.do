@@ -22,6 +22,19 @@ program define chaid_estat_classification
 	
 	// TODO: Determine accuracy stats on this new dataset
 	// Real macros, placeholder values. Need to assign real values.
+	local truePositives = 1
+	local falsePositives = 2
+	local falseNegatives = 3
+	local trueNegatives = 4
+	
+	local classifiedPositives = `truePositives' + `falsePositives'
+	local classifiedNegatives = `trueNegatives' + `falseNegatives'
+	
+	local actualPositives = `truePositives' + `falseNegatives'
+	local actualNegatives = `trueNegatives' + `falsePositives'
+	
+	local classifiedObservations = `actualPositives' + `actualNegatives'
+	
 	local sensitivityPercent = 80.947
 	local specificityPercent = 81.947
 	
@@ -43,13 +56,13 @@ program define chaid_estat_classification
 	display ""
 	display "{txt}{title:Decision tree model for acute}" // todo: acute
 	display ""
-	display "{ralign 36:{hline 8} True {hline 8}}"
+	display "{ralign 36:{c TLC}{hline 2} Actual {hline 3}{c TRC}}"
 	display "Classified {c |}{ralign 10: D}{dup 3: }{ralign 11: ~D}{dup 2: }{c |}{ralign 11: Total}"
 	display "{hline 11}{c +}{hline 26}{c +}{hline 11}"	
-	display "{center 11: +}{c |}{ralign 10: 4}{dup 3: }{ralign 11: 0}{dup 2: }{c |}{ralign 11: 4}" // todo
-	display "{center 11: -}{c |}{ralign 10: 1}{dup 3: }{ralign 11: 1}{dup 2: }{c |}{ralign 11: 2}" // todo
+	display "{center 11: +}{c |}" %10.0g `truePositives' "{dup 3: }" %11.0g `falsePositives' "{dup 2: }{c |}" %11.0g `classifiedPositives'
+	display "{center 11: -}{c |}" %10.0g `falseNegatives' "{dup 3: }" %11.0g `trueNegatives' "{dup 2: }{c |}" %11.0g `classifiedNegatives'
 	display "{hline 11}{c +}{hline 26}{c +}{hline 11}"	
-	display "{center 11: Total}{c |}{ralign 10: 5}{dup 3: }{ralign 11: 1}{dup 2: }{c |}{ralign 11: 6}" // todo
+	display "{center 11: Total}{c |}" %10.0g `actualPositives' "{dup 3: }" %11.0g `actualNegatives' "{dup 2: }{c |}" %11.0g `classifiedObservations'
 	display ""
 	display "Classified by tree"
 	display "True D defined as acute != 0" // todo: acute
