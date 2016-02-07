@@ -8952,3 +8952,306 @@ Correctly classified                        83.33%
 . 
 end of do-file
 
+. do "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_
+> estat_classification\chaid_estat_classification.do"
+
+. // Mustafa Hussain
+. // Spring 2016
+. // CHAIDESTAT - Postestimation classifier accuracy metrics for CHAID
+. // Written for STATA 13
+. 
+. // command prototype
+. // chaidestat classification if !mod(observation + 4, 9)
+. 
+. capture program drop chaid_estat_classification
+
+. program define chaid_estat_classification
+  1. *! Postestimation classifier accuracy metrics for CHAID v1 GR 2-Feb-16
+.         version 13.0
+  2.         syntax [if]
+  3.         
+.         // TODO: Grab all the stuff from CHAID's return registers
+.         
+.         // TODO: Parse IF to generate new dataset
+.         
+.         // TODO: Classify this new dataset based on the tree
+.         
+.         // TODO: Determine accuracy stats on this new dataset
+.         
+.         // TODO: Finally, print everything out (51 columns wide)
+.         
+.         display ""
+  4.         display "{error}NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED"
+  5.         display ""
+  6.         display "{txt}{title:Decision tree model for acute}" // todo: acute
+  7.         display ""
+  8.         display "{ralign 36:{hline 8} True {hline 8}}"
+  9.         display "Classified {c |}{ralign 10: D}{dup 3: }{ralign 11: ~D}{dup 2: }
+> {c |}{ralign 11: Total}"
+ 10.         display "{hline 11}{c +}{hline 26}{c +}{hline 11}"      
+ 11.         display "{center 11: +}{c |}{ralign 10: 4}{dup 3: }{ralign 11: 0}{dup 2:
+>  }{c |}{ralign 11: 4}" // todo
+ 12.         display "{center 11: -}{c |}{ralign 10: 1}{dup 3: }{ralign 11: 1}{dup 2:
+>  }{c |}{ralign 11: 2}" // todo
+ 13.         display "{hline 11}{c +}{hline 26}{c +}{hline 11}"      
+ 14.         display "{center 11: Total}{c |}{ralign 10: 5}{dup 3: }{ralign 11: 1}{du
+> p 2: }{c |}{ralign 11: 6}" // todo
+ 15.         display ""
+ 16.         display "Classified by tree"
+ 17.         display "True D defined as acute != 0" // todo: acute
+ 18.         display "{hline 50}"
+ 19.         display "{lalign 32:Sensitivity}Pr( +| D){%9.2f:96.879%}" // todo
+ 20.         display "{lalign 32:Sensitivity}Pr( +| D){ralign 9:80.00%}" // todo
+ 21.         display "{lalign 32:Specificity}Pr( -|~D){ralign 9:100.00%}" // todo
+ 22.         display "{lalign 32:Positive predictive value}Pr( D| +){ralign 9:100.00%
+> }" // todo
+ 23.         display "{lalign 32:Negative predictive value}Pr(~D| -){ralign 9:50.00%}
+> " // todo
+ 24.         display "{hline 50}"
+ 25.         display "{lalign 32:False + rate for true ~D}Pr( +|~D){ralign 9:0.00%}" 
+> // todo
+ 26.         display "{lalign 32:False - rate for true D}Pr( -| D){ralign 9:20.00%}" 
+> // todo
+ 27.         display "{lalign 32:False + rate for classified +}Pr(~D| +){ralign 9:0.0
+> 0%}" // todo
+ 28.         display "{lalign 32:False - rate for classified -}Pr( D| -){ralign 9:50.
+> 00%}" // todo
+ 29.         display "{hline 50}"
+ 30.         display "Correctly classified{ralign 30:83.33%}" // todo
+ 31.         display "{hline 50}"
+ 32.         
+. end
+
+. 
+. clear
+
+. cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_
+> estat_classification"
+C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_
+> classification
+
+. insheet using "SampleSet.csv"
+(13 vars, 54 obs)
+
+. 
+. // should look similar to this
+. quietly logistic acute vent drips if mod(observation + 4, 9)
+
+. estat classification if !mod(observation + 4, 9)
+
+Logistic model for acute
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |         4             0  |          4
+     -     |         1             1  |          2
+-----------+--------------------------+-----------
+   Total   |         5             1  |          6
+
+Classified + if predicted Pr(D) >= .5
+True D defined as acute != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D)   80.00%
+Specificity                     Pr( -|~D)  100.00%
+Positive predictive value       Pr( D| +)  100.00%
+Negative predictive value       Pr(~D| -)   50.00%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)    0.00%
+False - rate for true D         Pr( -| D)   20.00%
+False + rate for classified +   Pr(~D| +)    0.00%
+False - rate for classified -   Pr( D| -)   50.00%
+--------------------------------------------------
+Correctly classified                        83.33%
+--------------------------------------------------
+
+. 
+. 
+. // todo: get this to work
+. chaid_estat_classification // if !mod(observation + 4, 9)
+
+NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED
+
+Decision tree model for acute
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |         4             0  |          4
+     -     |         1             1  |          2
+-----------+--------------------------+-----------
+   Total   |         5             1  |          6
+
+Classified by tree
+True D defined as acute != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D){%9.2f:96.879%}
+Sensitivity                     Pr( +| D)   80.00%
+Specificity                     Pr( -|~D)  100.00%
+Positive predictive value       Pr( D| +)  100.00%
+Negative predictive value       Pr(~D| -)   50.00%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)    0.00%
+False - rate for true D         Pr( -| D)   20.00%
+False + rate for classified +   Pr(~D| +)    0.00%
+False - rate for classified -   Pr( D| -)   50.00%
+--------------------------------------------------
+Correctly classified                        83.33%
+--------------------------------------------------
+
+. 
+. 
+end of do-file
+
+. do "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_
+> estat_classification\chaid_estat_classification.do"
+
+. // Mustafa Hussain
+. // Spring 2016
+. // CHAIDESTAT - Postestimation classifier accuracy metrics for CHAID
+. // Written for STATA 13
+. 
+. // command prototype
+. // chaidestat classification if !mod(observation + 4, 9)
+. 
+. capture program drop chaid_estat_classification
+
+. program define chaid_estat_classification
+  1. *! Postestimation classifier accuracy metrics for CHAID v1 GR 2-Feb-16
+.         version 13.0
+  2.         syntax [if]
+  3.         
+.         // TODO: Grab all the stuff from CHAID's return registers
+.         
+.         // TODO: Parse IF to generate new dataset
+.         
+.         // TODO: Classify this new dataset based on the tree
+.         
+.         // TODO: Determine accuracy stats on this new dataset
+.         
+.         // TODO: Finally, print everything out (51 columns wide)
+.         
+.         display ""
+  4.         display "{error}NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED"
+  5.         display ""
+  6.         display "{txt}{title:Decision tree model for acute}" // todo: acute
+  7.         display ""
+  8.         display "{ralign 36:{hline 8} True {hline 8}}"
+  9.         display "Classified {c |}{ralign 10: D}{dup 3: }{ralign 11: ~D}{dup 2: }
+> {c |}{ralign 11: Total}"
+ 10.         display "{hline 11}{c +}{hline 26}{c +}{hline 11}"      
+ 11.         display "{center 11: +}{c |}{ralign 10: 4}{dup 3: }{ralign 11: 0}{dup 2:
+>  }{c |}{ralign 11: 4}" // todo
+ 12.         display "{center 11: -}{c |}{ralign 10: 1}{dup 3: }{ralign 11: 1}{dup 2:
+>  }{c |}{ralign 11: 2}" // todo
+ 13.         display "{hline 11}{c +}{hline 26}{c +}{hline 11}"      
+ 14.         display "{center 11: Total}{c |}{ralign 10: 5}{dup 3: }{ralign 11: 1}{du
+> p 2: }{c |}{ralign 11: 6}" // todo
+ 15.         display ""
+ 16.         display "Classified by tree"
+ 17.         display "True D defined as acute != 0" // todo: acute
+ 18.         display "{hline 50}"
+ 19.         display "{lalign 32:Sensitivity}Pr( +| D){%9.2f:96.879}" // todo
+ 20.         display "{lalign 32:Sensitivity}Pr( +| D){ralign 9:80.00%}" // todo
+ 21.         display "{lalign 32:Specificity}Pr( -|~D){ralign 9:100.00%}" // todo
+ 22.         display "{lalign 32:Positive predictive value}Pr( D| +){ralign 9:100.00%
+> }" // todo
+ 23.         display "{lalign 32:Negative predictive value}Pr(~D| -){ralign 9:50.00%}
+> " // todo
+ 24.         display "{hline 50}"
+ 25.         display "{lalign 32:False + rate for true ~D}Pr( +|~D){ralign 9:0.00%}" 
+> // todo
+ 26.         display "{lalign 32:False - rate for true D}Pr( -| D){ralign 9:20.00%}" 
+> // todo
+ 27.         display "{lalign 32:False + rate for classified +}Pr(~D| +){ralign 9:0.0
+> 0%}" // todo
+ 28.         display "{lalign 32:False - rate for classified -}Pr( D| -){ralign 9:50.
+> 00%}" // todo
+ 29.         display "{hline 50}"
+ 30.         display "Correctly classified{ralign 30:83.33%}" // todo
+ 31.         display "{hline 50}"
+ 32.         
+. end
+
+. 
+. clear
+
+. cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_
+> estat_classification"
+C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_
+> classification
+
+. insheet using "SampleSet.csv"
+(13 vars, 54 obs)
+
+. 
+. // should look similar to this
+. quietly logistic acute vent drips if mod(observation + 4, 9)
+
+. estat classification if !mod(observation + 4, 9)
+
+Logistic model for acute
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |         4             0  |          4
+     -     |         1             1  |          2
+-----------+--------------------------+-----------
+   Total   |         5             1  |          6
+
+Classified + if predicted Pr(D) >= .5
+True D defined as acute != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D)   80.00%
+Specificity                     Pr( -|~D)  100.00%
+Positive predictive value       Pr( D| +)  100.00%
+Negative predictive value       Pr(~D| -)   50.00%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)    0.00%
+False - rate for true D         Pr( -| D)   20.00%
+False + rate for classified +   Pr(~D| +)    0.00%
+False - rate for classified -   Pr( D| -)   50.00%
+--------------------------------------------------
+Correctly classified                        83.33%
+--------------------------------------------------
+
+. 
+. 
+. // todo: get this to work
+. chaid_estat_classification // if !mod(observation + 4, 9)
+
+NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED
+
+Decision tree model for acute
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |         4             0  |          4
+     -     |         1             1  |          2
+-----------+--------------------------+-----------
+   Total   |         5             1  |          6
+
+Classified by tree
+True D defined as acute != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D){%9.2f:96.879}
+Sensitivity                     Pr( +| D)   80.00%
+Specificity                     Pr( -|~D)  100.00%
+Positive predictive value       Pr( D| +)  100.00%
+Negative predictive value       Pr(~D| -)   50.00%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)    0.00%
+False - rate for true D         Pr( -| D)   20.00%
+False + rate for classified +   Pr(~D| +)    0.00%
+False - rate for classified -   Pr( D| -)   50.00%
+--------------------------------------------------
+Correctly classified                        83.33%
+--------------------------------------------------
+
+. 
+. 
+end of do-file
+
+. exit, clear

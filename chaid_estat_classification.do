@@ -6,6 +6,8 @@
 // command prototype
 // chaidestat classification if !mod(observation + 4, 9)
 
+set more off
+
 capture program drop chaid_estat_classification
 program define chaid_estat_classification
 *! Postestimation classifier accuracy metrics for CHAID v1 GR 2-Feb-16
@@ -19,6 +21,20 @@ program define chaid_estat_classification
 	// TODO: Classify this new dataset based on the tree
 	
 	// TODO: Determine accuracy stats on this new dataset
+	// Real macros, placeholder values. Need to assign real values.
+	local sensitivityPercent = 80.947
+	local specificityPercent = 81.947
+	
+	local positivePredictiveValuePercent = 82.947
+	local negativePredictiveValuePercent = 83.947
+	
+	// Longest possible var name is 31 chars
+	local falsePosRateForActuallyFalse = 84.947
+	local falseNegRateForActuallyTrue = 85.947
+	local falsePosRateForClassifiedTrue = 86.947
+	local falseNegRateForClassifiedFalse = 87.947
+	
+	local correctlyClassifiedPercent = 88.947
 	
 	// TODO: Finally, print everything out (51 columns wide)
 	
@@ -38,17 +54,17 @@ program define chaid_estat_classification
 	display "Classified by tree"
 	display "True D defined as acute != 0" // todo: acute
 	display "{hline 50}"
-	display "{lalign 32:Sensitivity}Pr( +| D){ralign 9:80.00%}" // todo
-	display "{lalign 32:Specificity}Pr( -|~D){ralign 9:100.00%}" // todo
-	display "{lalign 32:Positive predictive value}Pr( D| +){ralign 9:100.00%}" // todo
-	display "{lalign 32:Negative predictive value}Pr(~D| -){ralign 9:50.00%}" // todo
+	display "{lalign 32:Sensitivity}Pr( +| D)" %8.2f `sensitivityPercent' "%"
+	display "{lalign 32:Specificity}Pr( -|~D)" %8.2f `specificityPercent' "%"
+	display "{lalign 32:Positive predictive value}Pr( D| +)" %8.2f `positivePredictiveValuePercent' "%"
+	display "{lalign 32:Negative predictive value}Pr(~D| -)" %8.2f `negativePredictiveValuePercent' "%"
 	display "{hline 50}"
-	display "{lalign 32:False + rate for true ~D}Pr( +|~D){ralign 9:0.00%}" // todo
-	display "{lalign 32:False - rate for true D}Pr( -| D){ralign 9:20.00%}" // todo
-	display "{lalign 32:False + rate for classified +}Pr(~D| +){ralign 9:0.00%}" // todo
-	display "{lalign 32:False - rate for classified -}Pr( D| -){ralign 9:50.00%}" // todo
+	display "{lalign 32:False + rate for true ~D}Pr( +|~D)" %8.2f `falsePosRateForActuallyFalse' "%"
+	display "{lalign 32:False - rate for true D}Pr( -| D)" %8.2f `falseNegRateForActuallyTrue' "%"
+	display "{lalign 32:False + rate for classified +}Pr(~D| +)" %8.2f `falsePosRateForClassifiedTrue' "%"
+	display "{lalign 32:False - rate for classified -}Pr( D| -)" %8.2f `falseNegRateForClassifiedFalse' "%"
 	display "{hline 50}"
-	display "Correctly classified{ralign 30:83.33%}" // todo
+	display "{lalign 40:Correctly classified}" %9.2f `correctlyClassifiedPercent' "%"
 	display "{hline 50}"
 	
 end
