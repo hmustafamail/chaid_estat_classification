@@ -15,6 +15,7 @@ program define chaid_estat_classification
 	syntax [if]
 	
 	// TODO: Grab all the stuff from CHAID's return registers
+	local predictedVariable = "isAcute" // TODO: placeholder
 	
 	// TODO: Parse IF to generate new dataset
 	
@@ -54,9 +55,9 @@ program define chaid_estat_classification
 	display ""
 	display "{error}NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED"
 	display ""
-	display "{txt}{title:Decision tree model for acute}" // todo: acute
+	display "{txt}{title:Decision tree model for `predictedVariable'}"
 	display ""
-	display "{ralign 39:{c TLC}{hline 11} Actual {hline 7}{c TRC}}"
+	display "{ralign 39:{c TLC}{hline 12} Actual {hline 6}{c TRC}}"
 	display "Classified {c |}{ralign 10: D}{dup 3: }{ralign 11: ~D}{dup 2: }{c |}{ralign 11: Total}"
 	display "{hline 11}{c +}{hline 26}{c +}{hline 11}"	
 	display "{center 11: +}{c |}" %10.0g `truePositives' "{dup 3: }" %11.0g `falsePositives' "{dup 2: }{c |}" %11.0g `classifiedPositives'
@@ -65,7 +66,7 @@ program define chaid_estat_classification
 	display "{center 11: Total}{c |}" %10.0g `actualPositives' "{dup 3: }" %11.0g `actualNegatives' "{dup 2: }{c |}" %11.0g `classifiedObservations'
 	display ""
 	display "Classified by tree"
-	display "True D defined as acute != 0" // todo: acute
+	display "True D defined as `predictedVariable' != 0"
 	display "{hline 50}"
 	display "{lalign 32:Sensitivity}Pr( +| D)" %8.2f `sensitivityPercent' "%"
 	display "{lalign 32:Specificity}Pr( -|~D)" %8.2f `specificityPercent' "%"
