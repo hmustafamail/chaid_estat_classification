@@ -31,16 +31,31 @@ logistic acute vent drips nummedsquartile if mod(observation + 4, 9)
 estat classification if !mod(observation + 4, 9)
 
 //******************************************************************************
-// Example of using CHAIDESTAT, an analogous function for CHAID tree models.
+// Example of using CHAIDESTAT, my analogous function for CHAID tree models.
 //******************************************************************************
 
 // Create the decision tree
 chaid acute, ordered(vent drips nummedsquartile) ///
 			spltalpha(0.5) minnode(10) minsplit(10), ///
-			if mod(observation + 4, 9)
+			if mod(observation + 2, 9)
+
+// Displaying the returned macros
+display e(path1) // vent@0;nummedsquartile@1 6;
+display e(path2) // vent@1;
+display e(path3) // vent@0;nummedsquartile@11 15;
+display e(path4) // Nothing there! TODO: how to detect?
+
+display e(split1) // vent (0) (1)
+display e(split2) // nummedsquartile (1 6) (11 15)
+display e(split3) // Nothing here! TODO: how to detect?
+
+// Displaying the returned matrix.
+matrix list e(branches)
+
+// TODO: look into function e(sample), which "marks estimation sample"
 
 // TODO: Run on a sample set
-//chaid_estat_classification if !mod(observation + 4, 9)
+//chaid_estat_classification if !mod(observation + 2, 9)
 
 
 log close

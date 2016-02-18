@@ -1,6 +1,6 @@
 // Mustafa Hussain
 // Spring 2016
-// CHAIDESTAT - Postestimation classifier accuracy metrics for CHAID
+// chaid_estat_classification - Postestimation classifier accuracy metrics for CHAID
 // Written for STATA 13
 
 // command prototype
@@ -15,7 +15,9 @@ program define chaid_estat_classification
 	syntax [if]
 	
 	// TODO: Grab all the stuff from CHAID's return registers
-	local predictedVariable = "isAcute" // TODO: placeholder
+	local predictedVariable = e(depvar)
+	
+	// 
 	
 	// TODO: Parse IF to generate new dataset
 	
@@ -50,8 +52,7 @@ program define chaid_estat_classification
 	
 	local correctlyClassifiedPercent = 88.947
 	
-	// TODO: Finally, print everything out (51 columns wide)
-	
+	// Finally, print everything out (51 columns wide)
 	display ""
 	display "{error}NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED"
 	display ""
@@ -88,10 +89,10 @@ cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\cha
 insheet using "SampleSet.csv"
 
 // should look similar to this
-quietly logistic acute vent drips if mod(observation + 4, 9)
-estat classification if !mod(observation + 4, 9)
+quietly logistic acute vent drips if mod(observation + 2, 9)
+estat classification if !mod(observation + 2, 9)
 
 
 // todo: get this to work
-chaid_estat_classification // if !mod(observation + 4, 9)
+chaid_estat_classification // if !mod(observation + 2, 9)
 
