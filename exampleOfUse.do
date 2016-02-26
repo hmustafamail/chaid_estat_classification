@@ -6,7 +6,7 @@
 // Setting up the environment and variables
 //******************************************************************************
 
-clear
+clear all
 set more off
 
 // Set current directory (you will have to change this)
