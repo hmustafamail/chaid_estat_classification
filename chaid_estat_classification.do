@@ -23,7 +23,7 @@ program define chaid_estat_classification
 	
 	// 
 	
-	// TODO: Parse IF to generate new dataset
+	// TODO: Use generate_one_path_expression to create IF statement, generate new dataset
 	
 	// TODO: Classify this new dataset based on the tree
 	

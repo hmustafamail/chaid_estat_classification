@@ -68,9 +68,13 @@ local path1 = e(path1)
 generate_one_path_expression `"`path1'"'
 
 // These should give the same results. And they do :)
-list observation if ((vent == 0)) & ((nummedsquartile 
-> == 1) | (nummedsquartile == 6))
+list acute if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
 
-list observation `r(newExpression)'
+list acute `r(newExpression)'
+
+// Inferring the value of this cluster (would rather not do that)
+gen cluster1 = acute `r(newExpression)'
+egen mode = mode(cluster1), min by(acute)
+display mode
 
 //log close
