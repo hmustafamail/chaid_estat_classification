@@ -11,14 +11,14 @@ program define generate_one_path_expression
 	
 	// This is our expression.
 	display `"`1'"'
-	scalar inputExpression = `"`1'"'
+	gen str60 tokens = `"`1'"'
 	display "this is our input expresison"
-	display inputExpression
+	display tokens
 	display "that was our input expresison"
 	
 	// Tokens are separated by semicolons. 
 	// Split this expression up into a list of tokens.
-	split inputExpression, p(;), gen(tokens)
+	split tokens, parse(;)
 	
 	display "hey"
 	
@@ -27,7 +27,7 @@ program define generate_one_path_expression
 	// For each token
 	foreach token in `tokens'{
 		// Split on the @ sign into LEFT and RIGHT.
-		split `"`token'"', p(@), gen(leftAndRight)
+		split `"`token'"', p(@) gen(leftAndRight)
 		
 		// This is left
 		display "left"
