@@ -11,7 +11,7 @@ program define generate_one_path_expression
 	
 	// This is our expression.
 	display `"`1'"'
-	gen str60 tokens = `"`1'"'
+	gen str tokens = `"`1'"'
 	display "this is our input expresison"
 	display tokens
 	display "that was our input expresison"
@@ -20,22 +20,26 @@ program define generate_one_path_expression
 	// Split this expression up into a list of tokens.
 	split tokens, parse(;)
 	
-	display "hey"
+	// Setting up for building new expression.
+	gen str newExpr = ""
+	local i = 1
+	gen str curTok = tokens`i'
 	
-	local newExpression = ""
+	// For each token that exists
+	capture confirm variable "tokens`i'"
+	while(_rc){
+		display "in the loop`i'"
 	
-	// For each token
-	foreach token in `tokens'{
 		// Split on the @ sign into LEFT and RIGHT.
-		split `"`token'"', p(@) gen(leftAndRight)
+		split curTok, p(@)
 		
 		// This is left
 		display "left"
-		display leftAndRight1
+		display curTok1
 		
 		// This is right
 		display "right"
-		display leftAndRight1
+		display curTok2
 		
 		// Create a fresh token called newToken.
 		local newToken = ""
@@ -43,6 +47,12 @@ program define generate_one_path_expression
 		// For each word in RIGHT:
 			// Append (LEFT == word) to newToken.
 			// If there is another word coming, append “ or ” to newToken.
+		
+		display "ONE PLUS ONE IS " `i' + 1
+		replace i = `i' + 1
+		replace curTok = tokens`i'
+		display "now on " `i' " which is " curTok
+		capture confirm variable curTok
 	}
 	
 	// Join the tokens together. For each token:
