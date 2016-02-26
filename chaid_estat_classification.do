@@ -3,10 +3,14 @@
 // chaid_estat_classification - Postestimation classifier accuracy metrics for CHAID
 // Written for STATA 13
 
-// command prototype
-// chaidestat classification if !mod(observation + 4, 9)
 
 set more off
+
+// import dependency functions
+do "generate_one_path_expression.do"
+
+// command prototype
+// chaidestat classification if !mod(observation + 4, 9)
 
 capture program drop chaid_estat_classification
 program define chaid_estat_classification

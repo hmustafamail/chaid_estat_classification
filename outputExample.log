@@ -1,9 +1,9 @@
-------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------
       name:  <unnamed>
-       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chai
-> d_estat_classification\outputExample.log
+       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Ind
+> ependent Study\chaid_estat_classification\outputExample.log
   log type:  text
- opened on:  18 Feb 2016, 11:58:43
+ opened on:  26 Feb 2016, 10:44:10
 
 . 
 . // Import data
@@ -15,26 +15,40 @@
 . egen nummedsquartile = cut(nummeds), at(1, 6, 11, 15, 29)
 
 . 
-. //******************************************************************************
+. //*******************************************************************
+> ***********
 . // Example of using ESTAT, the precedent for logit models.
-. //******************************************************************************
+. //*******************************************************************
+> ***********
 . 
 . // Create logistic model
 . logistic acute vent drips nummedsquartile if mod(observation + 4, 9)
 
-Logistic regression                               Number of obs   =         48
-                                                  LR chi2(3)      =      26.55
-                                                  Prob > chi2     =     0.0000
-Log likelihood =  -19.82789                       Pseudo R2       =     0.4010
+Logistic regression                               Number of obs   =    
+>      48
+                                                  LR chi2(3)      =    
+>   26.55
+                                                  Prob > chi2     =    
+>  0.0000
+Log likelihood =  -19.82789                       Pseudo R2       =    
+>  0.4010
 
----------------------------------------------------------------------------------
-          acute | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
-----------------+----------------------------------------------------------------
-           vent |   12.08054   15.15933     1.99   0.047     1.032646    141.3257
-          drips |   2.212344   1.144865     1.53   0.125     .8023519     6.10015
-nummedsquartile |   1.161343   .0972935     1.79   0.074     .9854839    1.368583
-          _cons |   .0721588   .0713391    -2.66   0.008     .0103934    .5009816
----------------------------------------------------------------------------------
+-----------------------------------------------------------------------
+> -------
+       acute | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. In
+> terval]
+-------------+---------------------------------------------------------
+> -------
+        vent |   12.08054   15.15933     1.99   0.047     1.032646    1
+> 41.3257
+       drips |   2.212344   1.144865     1.53   0.125     .8023519     
+> 6.10015
+nummedsqua~e |   1.161343   .0972935     1.79   0.074     .9854839    1
+> .368583
+       _cons |   .0721588   .0713391    -2.66   0.008     .0103934    .
+> 5009816
+-----------------------------------------------------------------------
+> -------
 
 . 
 . // Run on a sample set
@@ -67,24 +81,35 @@ Correctly classified                        83.33%
 --------------------------------------------------
 
 . 
-. //******************************************************************************
-. // Example of using CHAIDESTAT, my analogous function for CHAID tree models.
-. //******************************************************************************
+. //*******************************************************************
+> ***********
+. // Example of using CHAIDESTAT, my analogous function for CHAID tree 
+> models.
+. //*******************************************************************
+> ***********
 . 
 . // Create the decision tree
 . chaid acute, ordered(vent drips nummedsquartile) ///
 >                         spltalpha(0.5) minnode(10) minsplit(10), ///
 >                         if mod(observation + 2, 9)
 
-Chi-Square Automated Interaction Detection (CHAID) Tree Branching Results
---------------------------------------------------------------------------------
+Chi-Square Automated Interaction Detection (CHAID) Tree Branching Resul
+> ts
+-----------------------------------------------------------------------
+> ---------
 
-                           1                       2                       3
-    +-------------------------------------------------------------------------+
-  1 |                 vent@0                  vent@0                  vent@1  |
-  2 |    nummedsquartile@1 6   nummedsquartile@11 15                          |
-  3 |             Cluster #1              Cluster #3              Cluster #2  |
-    +-------------------------------------------------------------------------+
+                           1                       2
+    +-------------------------------------------------
+  1 |                 vent@0                  vent@0
+  2 |    nummedsquartile@1 6   nummedsquartile@11 15
+  3 |             Cluster #1              Cluster #3
+    +-------------------------------------------------
+                           3
+     -------------------------+
+  1                   vent@1  |
+  2                           |
+  3               Cluster #2  |
+     -------------------------+
 
 . 
 . // Displaying the returned macros
@@ -111,14 +136,24 @@ nummedsquartile (1 6) (11 15)
 .
 
 . 
+. // Displaying the returned matrix.
+. matrix list e(branches)
+
+e(branches)[1,3]
+    c1  c2  c3
+r1   2   1   2
+
+. 
+. // TODO: look into function e(sample), which "marks estimation sample"
+. 
 . // TODO: Run on a sample set
 . //chaid_estat_classification if !mod(observation + 2, 9)
 . 
 . 
 . log close
       name:  <unnamed>
-       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chai
-> d_estat_classification\outputExample.log
+       log:  C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_classification\o
+> utputExample.log
   log type:  text
- closed on:  18 Feb 2016, 11:58:46
-------------------------------------------------------------------------------------------
+ closed on:  26 Feb 2016, 10:44:17
+------------------------------------------------------------------------------------------------------------------

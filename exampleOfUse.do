@@ -12,7 +12,11 @@ set more off
 // Set current directory (you will have to change this)
 cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_classification"
 
-log using outputExample,text replace
+// import functions
+do "generate_one_path_expression.do"
+//do "chaid_estat_classification.do"
+
+//log using outputExample,text replace
 
 // Import data
 insheet using "SampleSet.csv"
@@ -35,9 +39,10 @@ estat classification if !mod(observation + 4, 9)
 //******************************************************************************
 
 // Create the decision tree
-chaid acute, ordered(vent drips nummedsquartile) ///
+quietly chaid acute, ordered(vent drips nummedsquartile) ///
 			spltalpha(0.5) minnode(10) minsplit(10), ///
-			if mod(observation + 2, 9)
+			if mod(observation + 2, 9), ///
+			nodisp
 
 // Displaying the returned macros
 display e(path1) // vent@0;nummedsquartile@1 6;
@@ -57,5 +62,10 @@ matrix list e(branches)
 // TODO: Run on a sample set
 //chaid_estat_classification if !mod(observation + 2, 9)
 
+// Testing
+// Should become: if (vent == 0) and (nummedsquartile == 1 or nummedsquartile == 6)
+local path1 = e(path1)
+generate_one_path_expression `"`path1'"'
 
-log close
+
+//log close
