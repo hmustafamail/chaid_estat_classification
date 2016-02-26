@@ -20,7 +20,7 @@ program define generate_one_path_expression, rclass
 	
 	// Setting up for building new expression.
 	// Prefix the entire expression with IF 
-	quietly gen str newExpr = "IF "
+	quietly gen str newExpr = "if "
 	quietly local i = 1
 	quietly local iLimit = r(nvars)
 	
@@ -53,7 +53,7 @@ program define generate_one_path_expression, rclass
 			
 			// If there is another word coming, append OR to newExpr
 			if `j' < `jLimit'{
-				quietly replace newExpr = newExpr + " OR "
+				quietly replace newExpr = newExpr + " | "
 			}
 		}
 		
@@ -62,7 +62,7 @@ program define generate_one_path_expression, rclass
 		
 		// If there is another token, append AND to the end.
 		if `i' < `iLimit'{
-			quietly replace newExpr = newExpr + " AND "
+			quietly replace newExpr = newExpr + " & "
 		}
 	}
 	

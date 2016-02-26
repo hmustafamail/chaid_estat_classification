@@ -63,9 +63,14 @@ matrix list e(branches)
 //chaid_estat_classification if !mod(observation + 2, 9)
 
 // Testing
-// Should become: if (vent == 0) and (nummedsquartile == 1 or nummedsquartile == 6)
+// Should become: if (vent == 0) & (nummedsquartile == 1 | nummedsquartile == 6)
 local path1 = e(path1)
 generate_one_path_expression `"`path1'"'
 
+// These should give the same results. And they do :)
+list observation if ((vent == 0)) & ((nummedsquartile 
+> == 1) | (nummedsquartile == 6))
+
+list observation `r(newExpression)'
 
 //log close
