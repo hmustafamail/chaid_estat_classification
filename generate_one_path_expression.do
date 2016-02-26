@@ -54,10 +54,13 @@ program define generate_one_path_expression
 		
 		// For each word in RIGHT:
 		forvalues j = 1(1)`jLimit'{
-			// Append (LEFT == word) to newToken.
+			// Append (LEFT == word) to newExpr
+			replace newExpr = newExpr + "(" + tokens`i'1 + " == " + tokens`i'2`j' + ")"
 			
-			// If there is another word coming, append “ or ” to newToken.
-			
+			// If there is another word coming, append OR to newExpr
+			if `j' < `jLimit'{
+				replace newExpr = newExpr + " OR "
+			}
 		}
 		
 		// Finish wrapping those parentheses
@@ -67,8 +70,6 @@ program define generate_one_path_expression
 		if `i' < `iLimit'{
 			replace newExpr = newExpr + " AND "
 		}
-		
-		local i = `i' + 1
 	}
 	// Return the expression
 	display newExpr
