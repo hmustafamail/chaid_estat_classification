@@ -22,10 +22,10 @@ program define generate_one_path_expression
 	// Setting up for building new expression.
 	gen str newExpr = ""
 	local i = 1
+	local iLimit = r(nvars)
 	
-	// For each token that exists
-	capture confirm variable "tokens`i'"
-	while(_rc){
+	// For each token
+	forvalues i = 1(1)`iLimit'{
 		display "in the loop`i'"
 	
 		// Split on the @ sign into LEFT and RIGHT.
@@ -44,12 +44,7 @@ program define generate_one_path_expression
 			// Append (LEFT == word) to newToken.
 			// If there is another word coming, append “ or ” to newToken.
 		
-		
 		local i = `i' + 1
-		//local curTok = tokens`i'
-		display "now on " `i' " which is " tokens`i'
-		capture confirm variable "tokens`i'"
-		display _rc
 	}
 	
 	// Join the tokens together. For each token:
