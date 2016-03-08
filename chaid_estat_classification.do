@@ -109,21 +109,3 @@ program define chaid_estat_classification
 	display "{hline 50}"
 	
 end
-
-clear
-cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\chaid_estat_classification"
-insheet using "SampleSet.csv"
-
-// should look similar to this
-//quietly logistic acute vent drips if mod(observation + 2, 9)
-//estat classification if !mod(observation + 2, 9)
-
-
-quietly chaid acute, ordered(vent drips) ///
-			spltalpha(0.5) minnode(10) minsplit(10), ///
-			if mod(observation + 2, 9), ///
-			nodisp
-
-// todo: get this to work
-chaid_estat_classification if !mod(observation + 2, 9)
-
