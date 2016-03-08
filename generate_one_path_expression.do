@@ -12,7 +12,7 @@ program define generate_one_path_expression, rclass
 	// This is our expression.
 	quietly gen str tokens = `"`1'"'
 	
-	//display "tokens: " tokens
+	display "tokens: " tokens
 	
 	// Tokens are separated by semicolons. 
 	// Split this expression up into a list of tokens.
@@ -20,9 +20,9 @@ program define generate_one_path_expression, rclass
 	
 	// Setting up for building new expression.
 	// Prefix the entire expression with IF 
-	quietly gen str newExpr = "if "
-	quietly local i = 1
-	quietly local iLimit = r(nvars)
+	gen str newExpr = "if "
+	local i = 1
+	local iLimit = r(nvars)
 	
 	// For each token
 	forvalues i = 1(1)`iLimit'{
@@ -33,10 +33,10 @@ program define generate_one_path_expression, rclass
 		quietly split tokens`i', p(@)
 		
 		// This is left
-		//display "left " tokens`i'1
+		display "left " tokens`i'1
 		
 		// This is right
-		//display "right " tokens`i'2
+		display "right " tokens`i'2
 		
 		// Create a fresh token called newToken.
 		quietly local newToken = ""
@@ -44,7 +44,7 @@ program define generate_one_path_expression, rclass
 		// Split RIGHT into words
 		quietly split tokens`i'2
 		
-		quietly local jLimit = r(nvars)
+		local jLimit = r(nvars)
 		
 		// For each word in RIGHT:
 		forvalues j = 1(1)`jLimit'{
@@ -66,6 +66,12 @@ program define generate_one_path_expression, rclass
 		}
 	}
 	
+	
 	// Return the expression
+	display newExpr
 	return local newExpression = newExpr
+	
+	// Clean up
+	drop tokens*
+	drop newExpr
 end

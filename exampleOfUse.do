@@ -57,24 +57,19 @@ display e(split3) // Nothing here! TODO: how to detect?
 // Displaying the returned matrix.
 matrix list e(branches)
 
-// TODO: look into function e(sample), which "marks estimation sample"
-
 // TODO: Run on a sample set
-//chaid_estat_classification if !mod(observation + 2, 9)
+chaid_estat_classification if !mod(observation + 2, 9)
 
 // Testing
 // Should become: if (vent == 0) & (nummedsquartile == 1 | nummedsquartile == 6)
-local path1 = e(path1)
-generate_one_path_expression `"`path1'"'
+//local path1 = e(path1)
+//generate_one_path_expression `"`path1'"'
 
 // These should give the same results. And they do :)
-list acute if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
+//list acute if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
 
 list acute `r(newExpression)'
 
-// Inferring the value of this cluster (would rather not do that)
-gen cluster1 = acute `r(newExpression)'
-egen mode = mode(cluster1), min by(acute)
-display mode
+
 
 //log close

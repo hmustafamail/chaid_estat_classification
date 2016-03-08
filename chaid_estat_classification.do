@@ -16,16 +16,38 @@ capture program drop chaid_estat_classification
 program define chaid_estat_classification
 *! Postestimation classifier accuracy metrics for CHAID v1 GR 2-Feb-16
 	version 13.0
-	syntax [if]
+	//syntax [if]
 	
 	// TODO: Grab all the stuff from CHAID's return registers
 	local predictedVariable = e(depvar)
 	
-	// 
-	
 	// TODO: Use generate_one_path_expression to create IF statement, generate new dataset
+	quietly local iLimit = e(N_clusters)
+	forvalues i = 1(1)`iLimit'{
 	
-	// TODO: Classify this new dataset based on the tree
+		//local path1 = e(path1)
+		//generate_one_path_expression `"`path1'"'	
+		local path`i' = e(path`i')
+		local currPath = "path`i'"
+		
+		display "about to generate for path `i'"
+		
+		generate_one_path_expression `"`path`i''"'
+		
+		// TODO: Classify this new dataset based on the tree
+		
+		// Inferring the value of this cluster (would rather not do that)
+		// TODO: This keeps tripping over missing values, thinking that . is the mode.
+		//gen cluster1 = acute `r(newExpression)'
+		//egen mode = mode(cluster1), min by(acute)
+		gen cluster`i' = acute `r(newExpression)'
+		egen mode`i' = mode(cluster`i'), maxmode by(cluster`i'), if cluster`i' > .
+		display "mode: " mode`i'
+		
+	}
+	
+	display as error "EXITING EARLY FOR DEBUGGING PURPOSES"
+	exit 198
 	
 	// TODO: Determine accuracy stats on this new dataset
 	// Real macros, placeholder values. Need to assign real values.
@@ -93,10 +115,15 @@ cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\cha
 insheet using "SampleSet.csv"
 
 // should look similar to this
-quietly logistic acute vent drips if mod(observation + 2, 9)
-estat classification if !mod(observation + 2, 9)
+//quietly logistic acute vent drips if mod(observation + 2, 9)
+//estat classification if !mod(observation + 2, 9)
 
+
+quietly chaid acute, ordered(vent drips) ///
+			spltalpha(0.5) minnode(10) minsplit(10), ///
+			if mod(observation + 2, 9), ///
+			nodisp
 
 // todo: get this to work
-chaid_estat_classification // if !mod(observation + 2, 9)
+chaid_estat_classification if !mod(observation + 2, 9)
 
