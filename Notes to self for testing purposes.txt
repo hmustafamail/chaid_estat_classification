@@ -18,11 +18,13 @@ egen mode789 = mode(acute), maxmode, if ((vent == 0)) & ((nummedsquartile == 11)
 
 MEDIAN
 =======
-Should be 0, and it is:
+These should be zeros
 egen med123 = median(acute) if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
 
-Should be 1, but it's a period instead:
+These should be ones:
 egen med456 = median(acute) if ((vent == 1))
 
-Should be 0.5 but it's a period instead:
+Not sure what this is, expecting 0.5's:
 egen med789 = median(acute) if ((vent == 0)) & ((nummedsquartile == 11) | (nummedsquartile == 15))
+
+When you generate the median in Stata, you get a variable like any other. Observations not satisfying the "if" expression become missing values in the median variable.
