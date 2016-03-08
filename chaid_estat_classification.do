@@ -18,7 +18,7 @@ program define chaid_estat_classification
 	version 13.0
 	//syntax [if]
 	
-	// TODO: Grab all the stuff from CHAID's return registers
+	// TODO: Grab all the stuff from CHAID's return varaibles.
 	local predictedVariable = e(depvar)
 	
 	// TODO: Use generate_one_path_expression to create IF statement, generate new dataset
@@ -30,7 +30,8 @@ program define chaid_estat_classification
 		local path`i' = e(path`i')
 		local currPath = "path`i'"
 		
-		display "about to generate for path `i'"
+		display ""
+		display "About to generate logical expression for path `i'"
 		
 		generate_one_path_expression `"`path`i''"'
 		
@@ -40,8 +41,13 @@ program define chaid_estat_classification
 		// TODO: This keeps tripping over missing values, thinking that . is the mode.
 		//gen cluster1 = acute `r(newExpression)'
 		//egen mode = mode(cluster1), min by(acute)
-		gen cluster`i' = acute `r(newExpression)'
-		egen mode`i' = mode(cluster`i'), maxmode by(cluster`i'), if cluster`i' > .
+		
+		// This did not work:
+		//gen cluster`i' = acute `r(newExpression)'
+		//egen mode`i' = mode(cluster`i'), maxmode by(cluster`i'), if cluster`i' > .
+		
+		// Maybe this will work:
+		egen mode`i' = mode(acute), maxmode, `r(newExpression)'
 		display "mode: " mode`i'
 		
 	}

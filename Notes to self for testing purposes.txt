@@ -1,0 +1,28 @@
+
+if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
+
+if ((vent == 1))
+
+if ((vent == 0)) & ((nummedsquartile == 11) | (nummedsquartile == 15))
+
+MODE
+=====
+Should be 0, and it is:
+egen mode123 = mode(acute), maxmode, if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
+
+Should be 1, but it's a period instead:
+egen mode456 = mode(acute), maxmode, if ((vent == 1))
+
+No mode, and it's a period:
+egen mode789 = mode(acute), maxmode, if ((vent == 0)) & ((nummedsquartile == 11) | (nummedsquartile == 15))
+
+MEDIAN
+=======
+Should be 0, and it is:
+egen med123 = median(acute) if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
+
+Should be 1, but it's a period instead:
+egen med456 = median(acute) if ((vent == 1))
+
+Should be 0.5 but it's a period instead:
+egen med789 = median(acute) if ((vent == 0)) & ((nummedsquartile == 11) | (nummedsquartile == 15))

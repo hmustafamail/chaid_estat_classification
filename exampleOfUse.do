@@ -1,6 +1,8 @@
 // Mustafa Hussain
 // Spring 2016
-// Example of using CHAIDESTAT
+//
+// Example of using chaid_estat_classification that places it in context of 
+// similar functions
 
 //******************************************************************************
 // Setting up the environment and variables
