@@ -83,10 +83,11 @@ program define chaid_estat_classification
 	
 	local classifiedObservations = `actualPositives' + `actualNegatives'
 	
+	// Sensitivity and Specificity
 	local sensitivityPercent = (`truePositives' / `actualPositives') * 100
 	local specificityPercent = (`trueNegatives' / `actualNegatives') * 100
 	
-	// TODO: Determine accuracy stats on this new dataset
+	// Positive and Negative Predictive Value
 	count if classifiedAs
 	local classifiedAsPositive = r(N)
 	local positivePredictiveValuePercent = (`truePositives' / `classifiedAsPositive') * 100
@@ -96,10 +97,10 @@ program define chaid_estat_classification
 	local negativePredictiveValuePercent = (`trueNegatives' / `classifiedAsNegative') * 100
 	
 	// Longest possible var name is 31 chars
-	local falsePosRateForActuallyFalse = 84.947
-	local falseNegRateForActuallyTrue = 85.947
-	local falsePosRateForClassifiedTrue = 86.947
-	local falseNegRateForClassifiedFalse = 87.947
+	local falsePosRateForActuallyFalse = (`falsePositives' / `actualNegatives') * 100
+	local falseNegRateForActuallyTrue = (`falseNegatives' / `actualPositives') * 100
+	local falsePosRateForClassifiedTrue = (`falsePositives' / `classifiedAsPositive') * 100
+	local falseNegRateForClassifiedFalse = (`falseNegatives' / `classifiedAsNegative') * 100
 	
 	local correctlyClassifiedPercent = (`correctlyClassified' / `numObs') * 100
 	
