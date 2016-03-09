@@ -51,15 +51,19 @@ program define chaid_estat_classification
 	
 	list confusion
 	
-	display as error "EXITING EARLY FOR DEBUGGING PURPOSES"
-	exit 198
+	// Count true positives
+	gen truePos = classifiedAs & `predictedVariable'
+	count if truePos
+	local truePositives = r(N)
+	
+	// Count true negatives
+	gen trueNeg = !classifiedAs & !`predictedVariable'
+	count if trueNeg
+	local trueNegatives = r(N)
 	
 	// TODO: Determine accuracy stats on this new dataset
-	// Real macros, placeholder values. Need to assign real values.
-	local truePositives = 1
-	local falsePositives = 2
 	local falseNegatives = 3
-	local trueNegatives = 4
+	local falsePositives = 2
 	
 	local classifiedPositives = `truePositives' + `falsePositives'
 	local classifiedNegatives = `trueNegatives' + `falseNegatives'
@@ -85,8 +89,8 @@ program define chaid_estat_classification
 	
 	// Finally, print everything out (51 columns wide)
 	display ""
-	display "{error}NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED"
-	display "{error}NOTE: TESTING HAS BEEN LIMITED TO EXAMINING A CASE OF PREDICTING ONE BINARY DEPENDENT VAR."
+	display "{error}NOTE: PROTOTYPE -- NOT FULLY IMPLEMENTED"
+	display "{error}NOTE: TESTING HAS BEEN LIMITED TO EXAMINING A CASE OF PREDICTING ONE BINARY VARIABLE."
 	display ""
 	display "{txt}{title:Decision tree model for `predictedVariable'}"
 	display ""
