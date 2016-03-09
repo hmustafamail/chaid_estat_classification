@@ -48,7 +48,7 @@ program define chaid_estat_classification
 		
 		// Maybe this will work:
 		egen mode`i' = mode(acute), maxmode, `r(newExpression)'
-		display "mode: " mode`i'
+		list mode`i'
 		
 	}
 	
