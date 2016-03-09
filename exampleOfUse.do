@@ -17,7 +17,7 @@ cd "C:\Users\Mustafa\Dropbox\Classes\2016 a spring classes\Independent Study\cha
 // import function
 do "chaid_estat_classification.do"
 
-//log using outputExample,text replace
+log using outputExample,text replace
 
 // Import data
 insheet using "SampleSet.csv"
@@ -33,7 +33,7 @@ egen nummedsquartile = cut(nummeds), at(1, 6, 11, 15, 29)
 logistic acute vent drips nummedsquartile if mod(observation + 4, 9)
 
 // Run on a sample set
-estat classification if !mod(observation + 4, 9)
+estat classification if mod(observation, 3)
 
 //******************************************************************************
 // Example of using CHAIDESTAT, my analogous function for CHAID tree models.
@@ -45,10 +45,10 @@ quietly chaid acute, ordered(vent drips nummedsquartile) ///
 			if mod(observation + 2, 9), ///
 			nodisp
 
-// Run on entire set 
+// Get classification statistics on entire dataset
 chaid_estat_classification
 
-// Run on a sample set
+// Run on a subset of the data
 chaid_estat_classification if !mod(observation, 3)
 
-//log close
+log close

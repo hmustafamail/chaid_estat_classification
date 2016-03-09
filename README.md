@@ -7,4 +7,6 @@ Decision trees are awesome. They are far more intuitive, and about as accurate, 
 
 Joseph Luchman created the `chaid` function for STATA in 2014, which creates decision trees. However, logistic models are still better supported -- they can be validated on out-of-sample datasets using the `estat classification` function.
 
-That's where `chaid_estat_classification` comes in. When completed, it will provide the ability to test decision trees on any dataset, after creating the tree.
+That's where `chaid_estat_classification` comes in. It provides the ability to test decision trees on any dataset, after creating the tree.
+
+Please note that, although I have validated this code against a small example of predicting a binary variable, it has not been rigorously tested.
