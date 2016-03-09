@@ -47,9 +47,13 @@ program define chaid_estat_classification
 	}
 	
 	// This is the agreement between the classifier and the given labels.
-	gen confusion = classifiedAs == `predictedVariable'
+	gen agreements = classifiedAs == `predictedVariable'
+	count if agreements
+	local correctlyClassified = r(N)
 	
-	list confusion
+	// This is the total number of observations.
+	count
+	local numObs = r(N)
 	
 	// Count true positives
 	gen truePos = classifiedAs & `predictedVariable'
@@ -71,7 +75,6 @@ program define chaid_estat_classification
 	count if falsePos
 	local falsePositives = r(N)
 	
-	// TODO: Determine accuracy stats on this new dataset
 	local classifiedPositives = `truePositives' + `falsePositives'
 	local classifiedNegatives = `trueNegatives' + `falseNegatives'
 	
@@ -80,8 +83,9 @@ program define chaid_estat_classification
 	
 	local classifiedObservations = `actualPositives' + `actualNegatives'
 	
-	local sensitivityPercent = 80.947
-	local specificityPercent = 81.947
+	// TODO: Determine accuracy stats on this new dataset
+	local sensitivityPercent = (`truePositives' / `actualPositives') * 100
+	local specificityPercent = (`trueNegatives' / `actualNegatives') * 100
 	
 	local positivePredictiveValuePercent = 82.947
 	local negativePredictiveValuePercent = 83.947
@@ -92,13 +96,14 @@ program define chaid_estat_classification
 	local falsePosRateForClassifiedTrue = 86.947
 	local falseNegRateForClassifiedFalse = 87.947
 	
-	local correctlyClassifiedPercent = 88.947
+	local correctlyClassifiedPercent = (`correctlyClassified' / `numObs') * 100
 	
 	// Finally, print everything out (51 columns wide)
 	display ""
 	display "{error}NOTE: PROTOTYPE -- NOT FULLY IMPLEMENTED"
 	display "{error}NOTE: TESTING HAS BEEN LIMITED TO EXAMINING A CASE OF PREDICTING ONE BINARY VARIABLE."
 	display "{error}Also note that this assumes the tree errs on the side of safety, preferring false positives if it is unsure."
+	display "{error}Also note that this actually ignores your IF expression right now :D"
 	display "{txt}"
 	display "{txt}{title:Decision tree model for `predictedVariable'}"
 	display ""
