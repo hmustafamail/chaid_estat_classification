@@ -6,6 +6,9 @@
 //
 // Usage example:
 // chaidestat classification if !mod(observation + 4, 9)
+//
+// The IF statement is optional. If it is not supplied, the entire dataset is 
+// classified.
 
 // import dependency functions
 do "generate_one_path_expression.do"
@@ -16,8 +19,12 @@ program define chaid_estat_classification
 	version 13.0
 	syntax [if]
 	
-	// Just display the IF expression
-	display `"if now contains [`if']"'
+	// Generate a user selection based on user's IF expression.
+	// If they do not supply an IF, the variable is always 1! Yay!
+	//display `"if now contains [`if']"'
+	gen usrSel=1 `if'
+	replace usrSel=0 if usrSel==.
+	// list usrSel
 	
 	// Grab the dependent var and number of leaf nodes from CHAID's return vars.
 	local predictedVariable = e(depvar)
