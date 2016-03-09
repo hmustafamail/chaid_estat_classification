@@ -59,6 +59,6 @@ chaid_estat_classification if !mod(observation + 2, 9)
 // These should give the same results. And they do :)
 //list acute if ((vent == 0)) & ((nummedsquartile == 1) | (nummedsquartile == 6))
 
-list acute `r(newExpression)'
+//list acute `r(newExpression)'
 
 //log close

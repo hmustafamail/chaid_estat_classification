@@ -61,10 +61,17 @@ program define chaid_estat_classification
 	count if trueNeg
 	local trueNegatives = r(N)
 	
-	// TODO: Determine accuracy stats on this new dataset
-	local falseNegatives = 3
-	local falsePositives = 2
+	// Count false negatives
+	gen falseNeg = !classifiedAs & `predictedVariable'
+	count if falseNeg
+	local falseNegatives = r(N)
 	
+	// Count false positives
+	gen falsePos = classifiedAs & !`predictedVariable'
+	count if falsePos
+	local falsePositives = r(N)
+	
+	// TODO: Determine accuracy stats on this new dataset
 	local classifiedPositives = `truePositives' + `falsePositives'
 	local classifiedNegatives = `trueNegatives' + `falseNegatives'
 	
@@ -91,7 +98,8 @@ program define chaid_estat_classification
 	display ""
 	display "{error}NOTE: PROTOTYPE -- NOT FULLY IMPLEMENTED"
 	display "{error}NOTE: TESTING HAS BEEN LIMITED TO EXAMINING A CASE OF PREDICTING ONE BINARY VARIABLE."
-	display ""
+	display "{error}Also note that this assumes the tree errs on the side of safety, preferring false positives if it is unsure."
+	display "{txt}"
 	display "{txt}{title:Decision tree model for `predictedVariable'}"
 	display ""
 	display "{ralign 39:{c TLC}{hline 12} Actual {hline 6}{c TRC}}"
