@@ -22,57 +22,57 @@ program define chaid_estat_classification
 	quietly local iLimit = e(N_clusters)
 	
 	// This will be what CHAID classified values as.
-	gen classifiedAs = 0
+	quietly gen classifiedAs = 0
 	
 	// For each cluster, create its IF statement, generate data labels.
 	forvalues i = 1(1)`iLimit'{
 		local path`i' = e(path`i')
 		local currPath = "path`i'"
 		
-		display ""
-		display "About to generate logical expression for path `i'"
+		//display ""
+		//display "About to generate logical expression for path `i'"
 		
-		generate_one_path_expression `"`path`i''"'
+		quietly generate_one_path_expression `"`path`i''"'
 		
 		// Infer what CHAID would have labelled this cluster.
-		egen mode`i' = mode(acute), maxmode, `r(newExpression)'
+		quietly egen mode`i' = mode(acute), maxmode, `r(newExpression)'
 		//list mode`i'
 		
 		// Replace missing values with zeros, for piecing together.
-		replace mode`i'=0 if mode`i'==.
+		quietly replace mode`i'=0 if mode`i'==.
 		
 		// Piece those mode sets together to create a variable that represents 
 		// how CHAID classified this dataset.
-		replace classifiedAs=classifiedAs+mode`i'
+		quietly replace classifiedAs=classifiedAs+mode`i'
 	}
 	
 	// This is the agreement between the classifier and the given labels.
-	gen agreements = classifiedAs == `predictedVariable'
-	count if agreements
+	quietly gen agreements = classifiedAs == `predictedVariable'
+	quietly count if agreements
 	local correctlyClassified = r(N)
 	
 	// This is the total number of observations.
-	count
+	quietly count
 	local numObs = r(N)
 	
 	// Count true positives
-	gen truePos = classifiedAs & `predictedVariable'
-	count if truePos
+	quietly gen truePos = classifiedAs & `predictedVariable'
+	quietly count if truePos
 	local truePositives = r(N)
 	
 	// Count true negatives
-	gen trueNeg = !classifiedAs & !`predictedVariable'
-	count if trueNeg
+	quietly gen trueNeg = !classifiedAs & !`predictedVariable'
+	quietly count if trueNeg
 	local trueNegatives = r(N)
 	
 	// Count false negatives
-	gen falseNeg = !classifiedAs & `predictedVariable'
-	count if falseNeg
+	quietly gen falseNeg = !classifiedAs & `predictedVariable'
+	quietly count if falseNeg
 	local falseNegatives = r(N)
 	
 	// Count false positives
-	gen falsePos = classifiedAs & !`predictedVariable'
-	count if falsePos
+	quietly gen falsePos = classifiedAs & !`predictedVariable'
+	quietly count if falsePos
 	local falsePositives = r(N)
 	
 	local classifiedPositives = `truePositives' + `falsePositives'
@@ -88,11 +88,11 @@ program define chaid_estat_classification
 	local specificityPercent = (`trueNegatives' / `actualNegatives') * 100
 	
 	// Positive and Negative Predictive Value
-	count if classifiedAs
+	quietly count if classifiedAs
 	local classifiedAsPositive = r(N)
 	local positivePredictiveValuePercent = (`truePositives' / `classifiedAsPositive') * 100
 	
-	count if !classifiedAs
+	quietly count if !classifiedAs
 	local classifiedAsNegative = r(N)
 	local negativePredictiveValuePercent = (`trueNegatives' / `classifiedAsNegative') * 100
 	
@@ -106,10 +106,11 @@ program define chaid_estat_classification
 	
 	// Finally, print everything out (51 columns wide)
 	display ""
-	display "{error}NOTE: PROTOTYPE -- NOT FULLY IMPLEMENTED"
-	display "{error}NOTE: TESTING HAS BEEN LIMITED TO EXAMINING A CASE OF PREDICTING ONE BINARY VARIABLE."
-	display "{error}Also note that this assumes the tree errs on the side of safety, preferring false positives if it is unsure."
-	display "{error}Also note that this actually ignores your IF expression right now :D"
+	display "{error}NOTE:"
+	display "{error} (1) PROTOTYPE -- NOT FULLY IMPLEMENTED"
+	display "{error} (2) Testing has been limited to examining a case of predicting one binary variable."
+	display "{error} (3) This function assumes the tree errs on the side of safety, preferring false positives if it is unsure."
+	display "{error} (4) As of now, this actually ignores your IF expression right now, instead classifying the entire dataset."
 	display "{txt}"
 	display "{txt}{title:Decision tree model for `predictedVariable'}"
 	display ""
@@ -139,5 +140,9 @@ program define chaid_estat_classification
 	
 	// Clean up
 	drop mode*
+	drop true*
+	drop false*
+	drop agreements
+	drop classifiedAs
 	
 end
