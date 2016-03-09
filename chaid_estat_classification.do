@@ -14,7 +14,10 @@ capture program drop chaid_estat_classification
 program define chaid_estat_classification
 *! Postestimation classifier accuracy metrics for CHAID v1 GR 2-Feb-16
 	version 13.0
-	//syntax [if]
+	syntax [if]
+	
+	// Just display the IF expression
+	display `"if now contains [`if']"'
 	
 	// Grab the dependent var and number of leaf nodes from CHAID's return vars.
 	local predictedVariable = e(depvar)
@@ -109,8 +112,10 @@ program define chaid_estat_classification
 	display "{error}NOTE:"
 	display "{error} (1) PROTOTYPE -- NOT FULLY IMPLEMENTED"
 	display "{error} (2) Testing has been limited to examining a case of predicting one binary variable."
-	display "{error} (3) This function assumes the tree errs on the side of safety, preferring false positives if it is unsure."
-	display "{error} (4) As of now, this actually ignores your IF expression right now, instead classifying the entire dataset."
+	display "{error} (3) This function assumes the tree errs on the side of safety, preferring"
+	display "{error} 	false positives if it is unsure."
+	display "{error} (4) As of now, this actually ignores your IF expression right now, instead"
+	display "{error} 	classifying the entire dataset."
 	display "{txt}"
 	display "{txt}{title:Decision tree model for `predictedVariable'}"
 	display ""
