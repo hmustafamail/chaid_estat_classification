@@ -18,7 +18,11 @@ program define chaid_estat_classification
 	
 	// Grab the dependent var and number of leaf nodes from CHAID's return vars.
 	local predictedVariable = e(depvar)
+	
 	quietly local iLimit = e(N_clusters)
+	
+	// This will be what CHAID classified values as.
+	gen classifiedAs = 0
 	
 	// For each cluster, create its IF statement, generate data labels.
 	forvalues i = 1(1)`iLimit'{
@@ -32,12 +36,20 @@ program define chaid_estat_classification
 		
 		// Infer what CHAID would have labelled this cluster.
 		egen mode`i' = mode(acute), maxmode, `r(newExpression)'
-		list mode`i'
+		//list mode`i'
 		
-		// TODO: Piece those mode sets together to create a variable that
-		// represents how CHAID classified this dataset.
+		// Replace missing values with zeros, for piecing together.
+		replace mode`i'=0 if mode`i'==.
 		
+		// Piece those mode sets together to create a variable that represents 
+		// how CHAID classified this dataset.
+		replace classifiedAs=classifiedAs+mode`i'
 	}
+	
+	// This is the agreement between the classifier and the given labels.
+	gen confusion = classifiedAs == `predictedVariable'
+	
+	list confusion
 	
 	display as error "EXITING EARLY FOR DEBUGGING PURPOSES"
 	exit 198
@@ -74,6 +86,7 @@ program define chaid_estat_classification
 	// Finally, print everything out (51 columns wide)
 	display ""
 	display "{error}NOTE: PROTOTYPE -- NOT ACTUALLY IMPLEMENTED"
+	display "{error}NOTE: TESTING HAS BEEN LIMITED TO EXAMINING A CASE OF PREDICTING ONE BINARY DEPENDENT VAR."
 	display ""
 	display "{txt}{title:Decision tree model for `predictedVariable'}"
 	display ""
