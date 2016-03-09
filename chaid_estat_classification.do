@@ -1,16 +1,14 @@
 // Mustafa Hussain
 // Spring 2016
+//
 // chaid_estat_classification - Postestimation classifier accuracy metrics for CHAID
 // Written for STATA 13
-
-
-set more off
+//
+// Usage example:
+// chaidestat classification if !mod(observation + 4, 9)
 
 // import dependency functions
 do "generate_one_path_expression.do"
-
-// command prototype
-// chaidestat classification if !mod(observation + 4, 9)
 
 capture program drop chaid_estat_classification
 program define chaid_estat_classification
@@ -18,15 +16,12 @@ program define chaid_estat_classification
 	version 13.0
 	//syntax [if]
 	
-	// TODO: Grab all the stuff from CHAID's return varaibles.
+	// Grab the dependent var and number of leaf nodes from CHAID's return vars.
 	local predictedVariable = e(depvar)
-	
-	// TODO: Use generate_one_path_expression to create IF statement, generate new dataset
 	quietly local iLimit = e(N_clusters)
-	forvalues i = 1(1)`iLimit'{
 	
-		//local path1 = e(path1)
-		//generate_one_path_expression `"`path1'"'	
+	// For each cluster, create its IF statement, generate data labels.
+	forvalues i = 1(1)`iLimit'{
 		local path`i' = e(path`i')
 		local currPath = "path`i'"
 		
@@ -35,20 +30,12 @@ program define chaid_estat_classification
 		
 		generate_one_path_expression `"`path`i''"'
 		
-		// TODO: Classify this new dataset based on the tree
-		
-		// Inferring the value of this cluster (would rather not do that)
-		// TODO: This keeps tripping over missing values, thinking that . is the mode.
-		//gen cluster1 = acute `r(newExpression)'
-		//egen mode = mode(cluster1), min by(acute)
-		
-		// This did not work:
-		//gen cluster`i' = acute `r(newExpression)'
-		//egen mode`i' = mode(cluster`i'), maxmode by(cluster`i'), if cluster`i' > .
-		
-		// Maybe this will work:
+		// Infer what CHAID would have labelled this cluster.
 		egen mode`i' = mode(acute), maxmode, `r(newExpression)'
 		list mode`i'
+		
+		// TODO: Piece those mode sets together to create a variable that
+		// represents how CHAID classified this dataset.
 		
 	}
 	
@@ -113,5 +100,8 @@ program define chaid_estat_classification
 	display "{hline 50}"
 	display "{lalign 40:Correctly classified}" %9.2f `correctlyClassifiedPercent' "%"
 	display "{hline 50}"
+	
+	// Clean up
+	drop mode*
 	
 end
