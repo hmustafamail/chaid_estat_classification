@@ -22,8 +22,8 @@ program define chaid_estat_classification
 	// Generate a user selection based on user's IF expression.
 	// If they do not supply an IF, the variable is always 1! Yay!
 	//display `"if now contains [`if']"'
-	gen usrSel=1 `if'
-	replace usrSel=0 if usrSel==.
+	quietly gen usrSel=1 `if'
+	quietly replace usrSel=0 if usrSel==.
 	// list usrSel
 	
 	// Grab the dependent var and number of leaf nodes from CHAID's return vars.
@@ -58,31 +58,31 @@ program define chaid_estat_classification
 	
 	// This is the agreement between the classifier and the given labels.
 	quietly gen agreements = classifiedAs == `predictedVariable'
-	quietly count if agreements
+	quietly count if agreements & usrSel
 	local correctlyClassified = r(N)
 	
 	// This is the total number of observations.
-	quietly count
+	quietly count if usrSel
 	local numObs = r(N)
 	
 	// Count true positives
 	quietly gen truePos = classifiedAs & `predictedVariable'
-	quietly count if truePos
+	quietly count if truePos & usrSel
 	local truePositives = r(N)
 	
 	// Count true negatives
 	quietly gen trueNeg = !classifiedAs & !`predictedVariable'
-	quietly count if trueNeg
+	quietly count if trueNeg & usrSel
 	local trueNegatives = r(N)
 	
 	// Count false negatives
 	quietly gen falseNeg = !classifiedAs & `predictedVariable'
-	quietly count if falseNeg
+	quietly count if falseNeg & usrSel
 	local falseNegatives = r(N)
 	
 	// Count false positives
 	quietly gen falsePos = classifiedAs & !`predictedVariable'
-	quietly count if falsePos
+	quietly count if falsePos & usrSel
 	local falsePositives = r(N)
 	
 	local classifiedPositives = `truePositives' + `falsePositives'
@@ -98,11 +98,11 @@ program define chaid_estat_classification
 	local specificityPercent = (`trueNegatives' / `actualNegatives') * 100
 	
 	// Positive and Negative Predictive Value
-	quietly count if classifiedAs
+	quietly count if classifiedAs & usrSel
 	local classifiedAsPositive = r(N)
 	local positivePredictiveValuePercent = (`truePositives' / `classifiedAsPositive') * 100
 	
-	quietly count if !classifiedAs
+	quietly count if !classifiedAs & usrSel
 	local classifiedAsNegative = r(N)
 	local negativePredictiveValuePercent = (`trueNegatives' / `classifiedAsNegative') * 100
 	
@@ -156,5 +156,6 @@ program define chaid_estat_classification
 	drop false*
 	drop agreements
 	drop classifiedAs
+	drop usrSel
 	
 end

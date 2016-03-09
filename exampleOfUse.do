@@ -45,7 +45,10 @@ quietly chaid acute, ordered(vent drips nummedsquartile) ///
 			if mod(observation + 2, 9), ///
 			nodisp
 
-// TODO: Run on a sample set
+// Run on entire set 
+chaid_estat_classification
+
+// Run on a sample set
 chaid_estat_classification if !mod(observation, 3)
 
 //log close
