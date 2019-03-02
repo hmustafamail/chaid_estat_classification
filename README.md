@@ -10,3 +10,5 @@ Joseph Luchman created the `chaid` function for STATA in 2014, which creates dec
 That's where `chaid_estat_classification` comes in. It provides the ability to test decision trees on any dataset, after creating the tree.
 
 Please note that, although I have validated this code against a small example of predicting a binary variable, it has not been rigorously tested.
+
+Copyright for all code in this repository: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/)
